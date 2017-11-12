@@ -100,6 +100,21 @@ class Admin_model extends CI_Model {
     {
         return $this->db->select('*')->from('users')->get()->result_array();
     }
+
+    public function getEmployees()
+    {
+        return $this->db->select()->from('users')
+                     ->where('role',2)
+                     ->get()
+                     ->result_array();
+    }
+
+    public function delDesById($userId)
+    {
+        $this->db->query('DELETE from attendance WHERE user_id='.$userId);
+        $this->db->query('DELETE from users WHERE id='.$userId);
+        
+    }
     public function addAccount($data)
     {
         $st=$this->db->select('*')->from('users')->WHERE('email',$data['email'])->get()->result_array();
@@ -205,6 +220,84 @@ class Admin_model extends CI_Model {
         //echo '<pre>';print_r($st); exit;
         return $st;
     }
+    public function getEmpAttn($dd)
+    {
+        date_default_timezone_set('US/Pacific');
+        $dates=$this->db->SELECT('DISTINCT(date) as dates')
+                        ->from('attendance')
+                        ->WHERE('user_id',$dd)
+                        ->WHERE('MONTH(date)',date('m'))
+                        ->WHERE('YEAR(date)',date('Y'))
+                        ->get()
+                        ->result_array();
+        for($i=0;$i<count($dates);$i++)
+        {
+            $times=$this->db->query("SELECT attendance.*, users.name as user from attendance
+                                    inner join users on users.id=attendance.user_id
+                                    WHERE attendance.date='".$dates[$i]['dates']."' AND 
+                            user_id=".$dd)->result_array();
+            $st[$i]['user_id']=$times[0]['user_id']; 
+            $st[$i]['user']=$times[0]['user']; 
+            $st[$i]['date']=$times[0]['date']; 
+            $st[$i]['check_in']=$times[0]['check_in']; 
+            $seconds=0;          
+            for($j=0;$j<count($times);$j++)
+            {
+                if(!empty($times[$j]['check_out']))
+                {
+                    $seconds+=strtotime($times[$j]['check_out'])-strtotime($times[$j]['check_in']);
+                    $st[$i]['check_out']=$times[$j]['check_out'];
+                    $st[$i]['seconds']=$seconds;
+                }
+                else
+                {
+                    $st[$i]['check_out']='';
+                }
+            }
+        }               
+        
+        //echo '<pre>';print_r($st); exit;
+        return $st;
+    }
+    public function getEmpAttnByMonth($data)
+    {
+        date_default_timezone_set('US/Pacific');
+        $dates=$this->db->SELECT('DISTINCT(date) as dates')
+                        ->from('attendance')
+                        ->WHERE('user_id',$data['user_id'])
+                        ->WHERE('MONTH(date)',$data['month'])
+                        ->WHERE('YEAR(date)',date('Y'))
+                        ->get()
+                        ->result_array();
+        for($i=0;$i<count($dates);$i++)
+        {
+            $times=$this->db->query("SELECT attendance.*, users.name as user from attendance
+                                    inner join users on users.id=attendance.user_id
+                                    WHERE attendance.date='".$dates[$i]['dates']."' AND 
+                            user_id=".$data['user_id'])->result_array();
+            $st[$i]['user_id']=$times[0]['user_id']; 
+            $st[$i]['user']=$times[0]['user']; 
+            $st[$i]['date']=$times[0]['date']; 
+            $st[$i]['check_in']=$times[0]['check_in']; 
+            $seconds=0;          
+            for($j=0;$j<count($times);$j++)
+            {
+                if(!empty($times[$j]['check_out']))
+                {
+                    $seconds+=strtotime($times[$j]['check_out'])-strtotime($times[$j]['check_in']);
+                    $st[$i]['check_out']=$times[$j]['check_out'];
+                    $st[$i]['seconds']=$seconds;
+                }
+                else
+                {
+                    $st[$i]['check_out']='';
+                }
+            }
+        }               
+        
+        //echo '<pre>';print_r($st); exit;
+        return $st;
+    }
 
     public function getUserAttendance($userId,$date)
     {
@@ -216,8 +309,46 @@ class Admin_model extends CI_Model {
                         ->result_array();
     }
    
+    public function updateAttendance($userId,$date,$data)
+    {
+        //echo '<pre>';print_r($data);exit;
+        $attendance=$this->db->select('*')
+                        ->from('attendance')
+                        ->WHERE('user_id',$userId)
+                        ->WHERE('date',$date)
+                        ->get()
+                        ->result_array();
+        for($i=0;$i<count($attendance);$i++)
+        {
+            $attArray=array(
+                'check_in'  => $date.' '.date('H:i:s',strtotime($data[$attendance[$i]['id'].'-check_in'])),
+                'check_out' => $date.' '.date('H:i:s',strtotime($data[$attendance[$i]['id'].'-check_out'])),
+                'remarks'   => $data[$attendance[$i]['id'].'-remarks']
+            );
+            $this->db->WHERE('id',$attendance[$i]['id'])->update('attendance',$attArray);
+        }
+    }
 
+    public function getScopes($params)
+    {        
+        $this->load->library('CSVReader');
+        $csvData = $this->csvreader->parse_file('/var/www/html/scopes.csv'); //path to 
+        $url = $csvData[0]['url'];
+        $username = $csvData[0]['username'];
+        $password = $csvData[0]['password'];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $scopes = json_decode($result, true);
 
+        return $scopes;
+    }
     public function getById($table,$id)
     {
         $st=$this->db->select('*')->from($table)->WHERE('id',$id)->get()->result_array();

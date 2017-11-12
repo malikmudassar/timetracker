@@ -108,12 +108,11 @@ $db['development']['autoinit'] = TRUE;
 $db['development']['stricton'] = FALSE;
 
 */
-
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'clipboards@2015',//clipboards@2015
-	'password' => 'clipboardsPassword123',//clipboardsPassword123
+	'username' => 'root',
+	'password' => 'muhammad',
 	'database' => 'timetracker',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

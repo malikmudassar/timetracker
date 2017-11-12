@@ -24,7 +24,13 @@
                                 if(count($user_roles)>0) {
                                     for($i=0;$i<count($user_roles);$i++)
                                     {?>
-                                        <option value="<?php echo $user_roles[$i]['id']?>"><?php echo $user_roles[$i]['name']?></option>
+                                        <option value="<?php echo $user_roles[$i]['id']?>"
+                                            <?php 
+                                            if($user_roles[$i]['id']==$user['role']){
+                                                echo 'selected';
+                                            }
+                                            ?>
+                                            ><?php echo $user_roles[$i]['name']?></option>
                                     <?php
                                     }}
                                 ?>

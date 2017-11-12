@@ -34,6 +34,10 @@
                                         <td><?php echo $employees[$i]['mobile']?></td>
                                         <td>
                                             <a href="<?php echo base_url().'admin/edit_user/'.$employees[$i]['id'];?>" class="btn btn-default" title="Edit"><i class="icon icon-pencil"></i></a>
+                                            <button class="btn btn-danger" onclick="validate(this)" value="<?php echo $employees[$i]['id']?>"><i class="icon icon-times"></i></button>
+                                            <?php if(strtolower($employees[$i]['designation']) == 'technician') { ?>
+                                            <a href="<?php echo base_url().'admin/technican_scopes/'.$employees[$i]['id'];?>" class="btn btn-warning" title="Scopes"><i class="icon icon-list"></i></a>
+                                            <?php } ?>
                                             
                                         </td>
                                     </tr>
@@ -56,14 +60,14 @@
 
         swal({
                 title: "Are you sure?",
-                text: "You want to delete this User!",
+                text: "All attendance data will be deleted for this user.!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, Delete it!",
                 closeOnConfirm: false }, function()
             {
-                swal("Deleted!", "Department has been Deleted.", "success");
+                swal("Deleted!", "User has been Deleted.", "success");
                 $(location).attr('href','<?php echo base_url()?>admin/del_user/'+id);
             }
         );

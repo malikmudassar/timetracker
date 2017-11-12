@@ -20,6 +20,18 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-6 col-md-3">
+                <div class="panel panel-body" data-toggle="match-height"> 
+                    <h5>Links</h5>
+                    <div class="input-with-icon">
+                        <a href="<?php echo base_url().'admin/monthly_attendance'?>">-> Current Month</a>
+                        <br>
+                        <a href="<?php echo base_url().'admin/previous_months'?>">->
+                            Previous Months
+                        </a>
+                    </div>
+                </div>
+            </div>
             <div class="col-xs-12">
                 <?php if(isset($errors)){?>
                     <div class="alert alert-danger">
@@ -33,6 +45,7 @@
                 <?php }?>
 
                 <div class="clearfix"></div>
+                <h3>Today's Attendance</h3>
                 <div class="panel">
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -67,8 +80,11 @@
                                             <?php echo gmdate('H:i',$employees[$i]['seconds']).' hrs';?>
                                         </td>
                                         <td>
-                                        <a href="<?php echo base_url().'admin/userDetail/'.$employees[$i]['user_id'].'/'.$employees[$i]['date']?>">
+                                        <a href="<?php echo base_url().'admin/userDetail/'.$employees[$i]['user_id'].'/'.$employees[$i]['date']?>" 
+                                            class="btn btn-primary" title="View">
                                                 <i class="icon icon-eye"></i>
+                                        <a href="<?php echo base_url().'admin/edit_attendance/'.$employees[$i]['user_id'].'/'.$employees[$i]['date']?>" class="btn btn-warning" title="Edit">
+                                                <i class="icon icon-pencil"></i>
                                         </td>
                                         
                                     </tr>

@@ -19,7 +19,7 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class="control-label">Password</label>
-                        <input id="password" class="form-control" type="password" name="password" minlength="6" data-msg-minlength="Password must be 6 characters or more." data-msg-required="Please enter your password." required>
+                        <input id="password" class="form-control" type="password" name="password"  data-msg-required="Please enter your password." required>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit">Let me In</button>

@@ -63,6 +63,7 @@
                         ?>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li><a href="<?php echo base_url().$controller.'/edit_profile'?>">Profile</a></li>
+                            <li><a href="<?php echo base_url().$controller.'/change_password'?>">Change Password</a></li>
                             <li class="divider"></li>
                             
                             <li><a href="<?php echo base_url().$controller.'/logout'?>">Sign out</a></li>

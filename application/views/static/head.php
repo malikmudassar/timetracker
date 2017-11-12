@@ -13,8 +13,9 @@
     <link rel="manifest" href="manifest.json">
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#0288d1">
     <meta name="theme-color" content="#ffffff">
-    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700">-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700">
     <link rel="stylesheet" href="<?php echo BASE_URL?>css/vendor.minf9e3.css?v=1.1">
     <link rel="stylesheet" href="<?php echo BASE_URL?>css/elephant.minf9e3.css?v=1.1">
     <link rel="stylesheet" href="<?php echo BASE_URL?>css/application.minf9e3.css?v=1.1">
+    <link rel="stylesheet" href="<?php echo BASE_URL?>css/sweetalert.css">
 </head>

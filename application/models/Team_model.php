@@ -10,9 +10,6 @@ class Team_model extends CI_Model {
     function __construct(){
         parent::__construct();
     }
-
-    
-
     public function getMenuItems()
     {
         $st=$this->db->select('*')->from('team_menu')->where('parent',0)->get()->result_array();
@@ -45,26 +42,25 @@ class Team_model extends CI_Model {
         );
         $this->db->WHERE('id',$id)->update('users',$employees);
 	}
-	public function InsertEmployeeImage($id,$image){
-		$Image=array(
-            'id'                 	=> '',
-            'team_id'             => $id,
-            'image'              	=> $image
-        );
-        $this->db->insert('teams_image',$Image);
-        return ;
+	
+	public function checkOldPass($oldPass,$userId){
+		$st=$this->db->select('*')->from('users')
+                    ->WHERE('id',$userId)
+                    ->WHERE('password',md5(sha1($oldPass)))
+                    ->get()
+                    ->result_array();
+        if(empty($st))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
 	}
-	public function checkOldPass($email,$oldPass){
-		$array=array(
-			'email' => $email,
-			'password' => $oldPass
-		);
-		$st=$this->db->select('id')->from('users')->WHERE($array)->get()->result_array();
-        return mysql_affected_rows();
-	}
-	public function updatePass($id,$pass){
+	public function updatePass($id,$data){
 		$update=array(
-            'password'    => $pass
+            'password'    => md5(sha1($data['new_pass']))
         );
         $this->db->WHERE('id',$id)->update('users',$update);
 	}
@@ -73,19 +69,7 @@ class Team_model extends CI_Model {
 		$st=$this->db->select('id')->from('users')->WHERE('email',$email)->get()->result_array();
         return $st[0];
 	}
-	public function getImage($id){
-		$st=$this->db->select('*')->from('teams_image')->WHERE('team_id',$id)->get()->result_array();
-        return $st[0];
-	}
-	public function updateEmployeeImage($id,$img){
-		 $pic=array(
-            'image'      =>  $img
-        );
-        $this->db->WHERE('id',$id)->update('teams_image',$pic);
-	}
-
-   
-   
+	
 
     public function getMyAttendance($id)
     {
@@ -96,6 +80,7 @@ class Team_model extends CI_Model {
                 ->WHERE('YEAR(attendance.check_in)',date('Y'))
                 ->get()
                 ->result_array();
+        //echo $this->db->last_query();exit;
     }
     public function getMyMarkedAttendance()
     {
@@ -106,7 +91,7 @@ class Team_model extends CI_Model {
         return $st;
     }
 
-    public function clock_in($userId)
+    public function clockIn($userId)
     {
         date_default_timezone_set('US/Pacific');
         $att=array(
@@ -118,7 +103,7 @@ class Team_model extends CI_Model {
             );
         $this->db->insert('attendance',$att);
     }
-    public function clock_out($userId,$data)
+    public function clockOut($userId,$data)
     {
         //echo '<pre>';print_r($data);exit;
         date_default_timezone_set('US/Pacific');

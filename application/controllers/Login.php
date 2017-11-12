@@ -53,20 +53,13 @@ class Login extends CI_Controller {
                         {
                             $user['type']='team';
                         }
-                        elseif($user['role']==3)
-                        {
-                            $user['type']='client';
-                        }
-                        elseif($user['role']==4)
-                        {
-                            $user['type']='manager';
-                        }
+                        
                         $this->session->set_userdata($user);
                         redirect(base_url().$user['type']);
                     }
                     else
                     {
-                        $data['errors']='The credentials you have provided are incorrect or your account has not been approved yet.';
+                        $data['errors']='Sorry! Wrong Credentials.';
                         $this->load->view('static/head', $data);
                         $this->load->view('admin/login');
                     }

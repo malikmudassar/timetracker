@@ -45,7 +45,15 @@
                 <form data-toggle="validator" action="" method="post">
                     <label>Clock-out Reason </label>
                     <input type="hidden" name="id" value="<?php echo $id;?>">
-                    <input type="text" name="remarks" class="form-control" required><br>
+                    <select name="remarks" class="form-control">
+                        <option value="Short Break"> Short Break </option>
+                        <option value="Prayer Break"> Prayer Break </option>
+                        <option value="Restarting Machine"> Restarting Machine </option>
+                        <option value="Restarting Internet"> Restarting Internet </option>
+                        <option value="Going to restroom"> Going to restroom </option>
+                        <option value="Lunch/Dinner"> Lunch/Dinner </option>
+                        <option value="Shift Over"> Shift Over </option>
+                    </select>                    
                     <input type="submit" class="btn btn-primary" value="Clock-out">
                 </form>
             </div>

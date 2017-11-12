@@ -53,8 +53,28 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-define('BASE_URL','http://'.$_SERVER['SERVER_NAME'].'/');
+	//define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+
+switch(dirname(__FILE__))
+{
+    case '/home1/smartbaba/public_html/project':
+        define('ENVIRONMENT','production');
+    break;
+
+    case '/var/www/html/timetracker':
+        define('ENVIRONMENT','development');
+    break;
+}
+define('BASE_URL','http://'.$_SERVER['SERVER_NAME'].'/timetracker/');
 
 switch (ENVIRONMENT)
 {

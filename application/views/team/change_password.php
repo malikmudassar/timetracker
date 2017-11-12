@@ -31,7 +31,7 @@ die;  */
                         </div>
                         <div class="form-group">
                             <label>Confirm Password</label>
-                            <input type="password" name="confirm_pass" class="form-control" required>
+                            <input type="password" name="conf_pass" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary"> Update Password </button>
