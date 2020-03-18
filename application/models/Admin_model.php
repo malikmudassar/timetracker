@@ -359,4 +359,39 @@ class Admin_model extends CI_Model {
         $st=$this->db->select('*')->from($table)->WHERE($field,$id)->get()->result_array();
         return $st[0];
     }
+
+    public function generateCode($user_id)
+    {
+        $code=rand(1000,9999);
+        $item=array(
+            'user_id'   => $user_id,
+            'code'      =>$code
+        );
+        $this->db->insert('user_code', $item);
+        return $code;
+    }
+
+    public function authenticateCode($user_id, $code)
+    {
+        $code=$this->db->select('*')
+                    ->from('user_code')
+                    ->where('user_id', $user_id)
+                    ->where('code', $code)
+                    ->where('is_expire','no')
+                    ->get()
+                    ->result_array();
+        if($code)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function expireCode($user_id)
+    {
+        $this->db->query("update user_code set is_expire='yes' where user_id=".$user_id);
+    }
 }
