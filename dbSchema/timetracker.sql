@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.4.1deb2ubuntu2
+-- version 4.5.4.1deb2ubuntu2.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 30, 2017 at 03:05 AM
--- Server version: 5.7.19-0ubuntu0.16.04.1
--- PHP Version: 5.6.31-4+ubuntu16.04.1+deb.sury.org+4
+-- Generation Time: Mar 18, 2020 at 10:37 AM
+-- Server version: 5.7.29-0ubuntu0.16.04.1
+-- PHP Version: 7.2.23-1+ubuntu16.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -75,7 +75,8 @@ INSERT INTO `attendance` (`id`, `user_id`, `date`, `check_in`, `check_out`, `hou
 (12, 3, '2017-09-29', '2017-09-29 03:22:13', '2017-09-29 04:44:12', 1, 'Going to restroom'),
 (13, 3, '2017-09-29', '2017-09-29 04:54:42', '2017-09-29 05:03:17', 0, 'Going for a smoke'),
 (14, 3, '2017-09-29', '2017-09-29 05:18:41', '2017-09-29 06:30:23', 1, 'shift over'),
-(16, 3, '2017-09-29', '2017-09-29 08:24:00', '2017-09-29 08:24:52', 0, 'Going for a smoke');
+(16, 3, '2017-09-29', '2017-09-29 08:24:00', '2017-09-29 08:24:52', 0, 'Going for a smoke'),
+(17, 3, '2020-03-05', '2020-03-04 21:18:32', NULL, 0, '');
 
 -- --------------------------------------------------------
 
@@ -126,10 +127,23 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `role`, `designation`, `email`, `password`, `location`, `mobile`) VALUES
 (1, 'hira', 1, 'HR Manager', 'hira@wadic.net', '496d8d37306246ef4ea37bddb7e7355e', 'Pakistan', '0300-2009000'),
-(2, 'Mudassar', 2, 'PHP Developer', 'mudassar.khan@wadic.net', '496d8d37306246ef4ea37bddb7e7355e', 'Pakistan', '03215491752'),
+(2, 'Mudassar', 2, 'PHP Developer', 'mudassar.khani@attech-ltd.com', '496d8d37306246ef4ea37bddb7e7355e', 'Pakistan', '03215491752'),
 (3, 'malik', 2, 'Developer', 'malikmudassar@gmail.com', '496d8d37306246ef4ea37bddb7e7355e', 'Pakistan', '03215491752'),
 (4, 'Farhan Asim', 2, 'Sr PHP Developer', 'farhan@wadic.net', '496d8d37306246ef4ea37bddb7e7355e', 'Pakistan', '1234567890'),
 (5, 'Fasial Khalil', 2, 'Designer', 'faisal@wadic.net', '496d8d37306246ef4ea37bddb7e7355e', 'Pakistan', '5678945');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_code`
+--
+
+CREATE TABLE `user_code` (
+  `id` int(5) NOT NULL,
+  `user_id` int(4) NOT NULL,
+  `code` int(4) NOT NULL,
+  `is_expire` enum('no','yes') NOT NULL DEFAULT 'no'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -179,6 +193,12 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `user_code`
+--
+ALTER TABLE `user_code`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user_roles`
 --
 ALTER TABLE `user_roles`
@@ -197,7 +217,7 @@ ALTER TABLE `admin_menu`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `team_menu`
 --
@@ -208,6 +228,11 @@ ALTER TABLE `team_menu`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `user_code`
+--
+ALTER TABLE `user_code`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
