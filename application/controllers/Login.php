@@ -11,7 +11,6 @@ class Login extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('Admin_model');
-        // $this->load->library('My_PHPMailer');
     }
 
     public function index()
@@ -21,7 +20,6 @@ class Login extends CI_Controller {
             $data['title']='PM Portal';
             if($_POST)
             {
-                // $code=$this->admin_model->generateCode();
                 $config=array(
                     array(
                         'field' => 'email',
@@ -47,22 +45,28 @@ class Login extends CI_Controller {
 
                     if(!empty($user))
                     {
-                        // Generate a code to send to user
-                        $data['user_id']=$user['id'];
-                        $this->Admin_model->expireCode($user['id']);
-                        $data['code']=$this->Admin_model->generateCode($user['id']);
-                        // Send this code in Email here 
-
-                        // Compose and Send
-
-                        // Email block ends 
-                        $this->load->view('static/head', $data);
-                        $this->load->view('admin/authorize');
-                        
+                        if($user['role']==1)
+                        {
+                            $user['type']='admin';
+                        }
+                        elseif($user['role']==2)
+                        {
+                            $user['type']='team';
+                        }
+                        elseif($user['role']==3)
+                        {
+                            $user['type']='client';
+                        }
+                        elseif($user['role']==4)
+                        {
+                            $user['type']='manager';
+                        }
+                        $this->session->set_userdata($user);
+                        redirect(base_url().$user['type']);
                     }
                     else
                     {
-                        $data['errors']='Sorry! Wrong Credentials.';
+                        $data['errors']='The credentials you have provided are incorrect or your account has not been approved yet.';
                         $this->load->view('static/head', $data);
                         $this->load->view('admin/login');
                     }
@@ -79,35 +83,6 @@ class Login extends CI_Controller {
             redirect(base_url().$this->session->userdata['type']);
         }
 
-    }
-    public function authorize()
-    {
-        if($_POST)
-        {
-            $user_id=$_POST['user_id'];
-            $code=$this->input->post('code');
-            if($this->Admin_model->authenticateCode($user_id, $code))
-            {
-                $user=$this->Admin_model->getAllById('users',$user_id);
-                $user['type']='admin';
-                $this->session->set_userdata($user);
-                $this->Admin_model->expireCode($user_id);
-                redirect(base_url().'admin');
-            }
-            else
-            {
-                $data['errors']='Sorry, the code you have entered is expired, please use the new code';
-                // print_r($_POST);exit;
-                $data['user_id']=$_POST['user_id'];
-                $this->load->view('static/head', $data);
-                $this->load->view('admin/authorize');
-            }
-        }
-        else
-        {
-            echo 'nothing posted' ;exit;
-            return false;
-        }
     }
 
     public function isLoggedIn()
